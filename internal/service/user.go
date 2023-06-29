@@ -12,6 +12,7 @@ import (
 type IUserService interface {
 	SignIn(logIn model.User) (string, error)
 	SignUp(user model.User) (string, error)
+	PayOff(userId string, input model.Debt) (model.Debt, error)
 }
 
 type UserService struct {
@@ -61,4 +62,16 @@ func (s UserService) SignUp(newUser model.User) (string, error) {
 	}
 
 	return token, nil
+}
+
+func (s UserService) PayOff(userId string, input model.Debt) (model.Debt, error) {
+	var debt model.Debt
+
+	debt, err := s.repo.PayOff(userId, input)
+	if err != nil {
+		s.logger.Warn(err)
+		return debt, err
+	}
+
+	return debt, nil
 }

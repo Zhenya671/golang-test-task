@@ -79,3 +79,35 @@ func (h Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(marshal)
 }
+
+func (h Handler) PayOff(w http.ResponseWriter, r *http.Request) {
+	var input model.Debt
+
+	userID := r.Header.Get("UserID")
+	if userID == "" {
+		h.handle_errors(w, http.StatusUnauthorized, messages.AppErrorUnauthorized.Error())
+		return
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		h.log.Warn(err)
+		h.handle_errors(w, http.StatusBadRequest, messages.AppErrorWithMarshalling.Error())
+		return
+	}
+
+	payOff, err := h.user.PayOff(userID, input)
+	if err != nil {
+		h.handle_errors(w, http.StatusBadRequest, messages.AppErrorCantPayOff.Error())
+		return
+	}
+
+	marshal, err := json.Marshal(payOff)
+	if err != nil {
+		h.handle_errors(w, http.StatusBadRequest, messages.AppErrorWithMarshalling.Error())
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(marshal)
+}

@@ -46,9 +46,19 @@ func (r *Repository) SignIn(logIn model.User) (model.User, error) {
 }
 
 func (r *Repository) SignUp(user model.User) (model.User, error) {
+	var savedUser model.User
+	var existence int
+
+	checkQuery := `select id from users where login=$1 and password=$2`
+
+	checkRow := r.DB.QueryRow(checkQuery, user.Login, user.Password)
+	checkRow.Scan(&existence)
+	if existence != 0 {
+		return savedUser, errors.New("")
+	}
+
 	query := `insert into users(lastname, firstname, fathersname, group_id, login, password) values ($1, $2, $3, (SELECT id FROM groups WHERE group_number = $4), $5, $6) returning id, login`
 
-	var savedUser model.User
 	row := r.DB.QueryRow(query, user.LastName, user.FirstName, user.FathersName, user.GroupNumber, user.Login, user.Password)
 
 	if err := row.Scan(&savedUser.ID, &savedUser.Password); err != nil {

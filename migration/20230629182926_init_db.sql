@@ -2,7 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS groups (
     id SERIAL PRIMARY KEY,
-    group_number VARCHAR(255) NOT NULL
+    group_number VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS debt (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT NOT NULL UNIQUE,
     amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );

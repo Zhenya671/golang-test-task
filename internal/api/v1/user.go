@@ -11,6 +11,7 @@ func (api ApiV1) client(r *mux.Router) *mux.Router {
 
 	v1 := r.PathPrefix("").Subrouter()
 	v1.Use(api.h.Middleware)
+	v1.HandleFunc("/pay-off", api.h.PayOff).Methods(http.MethodPost)
 
 	return r
 }

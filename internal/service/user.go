@@ -1,18 +1,35 @@
 package service
 
 import (
+	"fmt"
 	"github.com/Zhenya671/golang-test-task/internal/messages"
 	"github.com/Zhenya671/golang-test-task/internal/model"
 	"github.com/Zhenya671/golang-test-task/internal/repository"
 	"github.com/Zhenya671/golang-test-task/internal/settings"
+	"github.com/Zhenya671/golang-test-task/internal/usecases"
 	"github.com/sirupsen/logrus"
 	"strings"
+)
+
+type IntFunc func([]int) []int
+
+var tasksMap = map[string]IntFunc{
+	"FindingMissingNumbersInAnUnsortedArray": usecases.FindingMissingNumbersInAnUnsortedArray,
+}
+
+var costTasksMap = map[string]float64{
+	"FindingMissingNumbersInAnUnsortedArray": FindingMissingNumbersInAnUnsortedArray,
+}
+
+const (
+	FindingMissingNumbersInAnUnsortedArray = 35
 )
 
 type IUserService interface {
 	SignIn(logIn model.User) (string, error)
 	SignUp(user model.User) (string, error)
 	PayOff(userId string, input model.Debt) (model.Debt, error)
+	SolveAlgo(userID, algoName string, input model.Task) (model.Task, error)
 }
 
 type UserService struct {
@@ -74,4 +91,26 @@ func (s UserService) PayOff(userId string, input model.Debt) (model.Debt, error)
 	}
 
 	return debt, nil
+}
+
+func (s UserService) SolveAlgo(userID, algoName string, input model.Task) (model.Task, error) {
+	var result model.Task
+
+	intSlice := make([]int, 0, len(input.InputData))
+	for _, val := range input.InputData {
+		switch v := val.(type) {
+		case float64:
+			intSlice = append(intSlice, int(v))
+		default:
+			fmt.Println("Skipping unsupported value:", val)
+		}
+	}
+
+	err := s.repo.SetDebt(userID, costTasksMap[algoName])
+	if err != nil {
+		return result, err
+	}
+
+	result.OutputData = tasksMap[algoName](intSlice)
+	return result, nil
 }

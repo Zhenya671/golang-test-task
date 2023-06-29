@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: rest_api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8080"
+    depends_on:
+      - db
+    env_file:
+      - config/app.env
+    networks:
+      - backend
+
+  db:
+    restart: always
+    image: postgres:latest
+    container_name: db_postgres
+    env_file:
+      - config/db.env
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+networks:
+  backend:

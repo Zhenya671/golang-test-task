@@ -82,13 +82,14 @@ func (r *Repository) PayOff(userId string, input model.Debt) (model.Debt, error)
 	err = tx.QueryRow(`
 	SELECT amount 
 	FROM debt
-	WHERE user_id = $1`, userId).Scan(&userDebt)
+	WHERE user_id = $1
+	FOR UPDATE`, userId).Scan(&userDebt)
 	if err != nil {
 		return debt, err
 	}
 
 	amount := userDebt - input.Amount
-	if amount <= 0 {
+	if amount <= 0.00 {
 		debt.CashBack = amount * -1
 		amount = 0
 	}

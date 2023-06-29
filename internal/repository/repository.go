@@ -11,6 +11,7 @@ type IUserRepository interface {
 	SignIn(logIn model.User) (model.User, error)
 	SignUp(user model.User) (model.User, error)
 	PayOff(userId string, input model.Debt) (model.Debt, error)
+	SetDebt(userId string, amount float64) error
 }
 
 type Repository struct {
@@ -114,4 +115,47 @@ func (r *Repository) PayOff(userId string, input model.Debt) (model.Debt, error)
 		return debt, err
 	}
 	return debt, nil
+}
+
+func (r *Repository) SetDebt(userId string, amount float64) error {
+	tx, err := r.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if p := recover(); p != nil {
+			_ = tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			_ = tx.Rollback()
+		} else {
+			err = tx.Commit()
+		}
+	}()
+
+	var userDebt float64
+	err = tx.QueryRow(`
+	SELECT amount 
+	FROM debt
+	WHERE user_id = $1
+	FOR UPDATE`, userId).Scan(&userDebt)
+	if err != nil {
+		return err
+	}
+
+	var limit float64 = 1000
+	dif := userDebt + amount
+	if dif >= limit {
+		return errors.New("exceed debt limit")
+	}
+
+	_, err = tx.Exec(`
+	UPDATE debt 
+	SET amount = $1
+	WHERE user_id = $2`, dif, userId)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -10,4 +10,5 @@ var (
 	AppErrorSuchUserExist = errors.New("such user exist in the system yet")
 	AppErrorUnauthorized  = errors.New("unauthorized")
 	AppErrorCantPayOff    = errors.New("can't pay off")
+	AppErrorCantSolveTask = errors.New("can't solve your request or exceed debt limit")
 )

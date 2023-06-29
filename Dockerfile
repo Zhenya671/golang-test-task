@@ -5,7 +5,7 @@ WORKDIR $GOPATH/src
 ADD . .
 ENV GO111MODULE=on
 
-RUN go build -o /bin/app main.go
+RUN go build -o /bin/app ./cmd/web
 
 FROM ubuntu:latest
 

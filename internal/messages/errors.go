@@ -8,4 +8,6 @@ var (
 
 	AppErrorUserNotFound  = errors.New("such user not found")
 	AppErrorSuchUserExist = errors.New("such username exist in the system yet")
+	AppErrorUnauthorized  = errors.New("unauthorized")
+	AppErrorCantPayOff    = errors.New("can't pay off")
 )

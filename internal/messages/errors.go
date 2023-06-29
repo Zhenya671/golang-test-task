@@ -7,7 +7,7 @@ var (
 	AppErrorStatusBadRequest = errors.New("status bad request")
 
 	AppErrorUserNotFound  = errors.New("such user not found")
-	AppErrorSuchUserExist = errors.New("such username exist in the system yet")
+	AppErrorSuchUserExist = errors.New("such user exist in the system yet")
 	AppErrorUnauthorized  = errors.New("unauthorized")
 	AppErrorCantPayOff    = errors.New("can't pay off")
 )

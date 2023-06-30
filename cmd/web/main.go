@@ -30,7 +30,7 @@ type server struct {
 	server *http.Server
 }
 
-func (s *server) swaggerRun(host string) {
+func (s *server) swaggerRun() {
 	r := chi.NewRouter()
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://213.139.210.171:12/swagger/doc.json"), //The url pointing to API definition
@@ -103,12 +103,12 @@ func main() {
 
 	srv := new(server)
 
+	logger.Infof("swagger started url %s", "http://localhost:12/swagger/index.html")
+
 	go srv.shutdown(logger)
+	go srv.swaggerRun()
 
 	ip := usecases.GetOutboundIP().String()
-	go srv.swaggerRun(ip)
-
-	logger.Infof("swagger started url %s", fmt.Sprintf("http://localhost:12/swagger/index.html", ip))
 	logger.Infof("application started on %s:%s", ip, newAppSettings.Port)
 
 	if err := srv.run(router, newAppSettings); err != nil {

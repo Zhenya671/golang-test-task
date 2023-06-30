@@ -1,8 +1,188 @@
-basePath: /api/v1
+basePath: /
+definitions:
+  model.Debt:
+    properties:
+      amount:
+        type: number
+      cash_back:
+        type: number
+      id:
+        type: integer
+    type: object
+  model.ErrorResponse:
+    properties:
+      error:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  model.Task:
+    properties:
+      input_data:
+        items: {}
+        type: array
+      output_data: {}
+    type: object
+  model.Token:
+    properties:
+      token:
+        type: string
+    type: object
+  model.User:
+    properties:
+      debt:
+        $ref: '#/definitions/model.Debt'
+      fathers_name:
+        type: string
+      first_name:
+        type: string
+      group_number:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
 info:
   contact: {}
-  description: API Server for Golang-test-task Application
-  title: Golang-test-task
-  version: "3.0"
-paths: {}
+  description: This is the API documentation for Your Application.
+  title: Your Application API
+  version: "1.0"
+paths:
+  /sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user credentials and generate a token
+      parameters:
+      - description: User credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token response
+          schema:
+            $ref: '#/definitions/model.Token'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: User sign-in
+      tags:
+      - User
+  /sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: User registration data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token response
+          schema:
+            $ref: '#/definitions/model.Token'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: User sign-up
+      tags:
+      - User
+  /user/pay-off:
+    post:
+      consumes:
+      - application/json
+      description: Process debt payment for a user
+      parameters:
+      - description: User ID
+        in: header
+        name: UserID
+        required: true
+        type: string
+      - description: Debt details
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Debt'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Payment response
+          schema:
+            $ref: '#/definitions/model.Debt'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Pay off debt
+      tags:
+      - User
+  /user/task/algo/{AlgoName}:
+    post:
+      consumes:
+      - application/json
+      description: Solve an algorithm task
+      parameters:
+      - description: User ID
+        in: header
+        name: UserID
+        required: true
+        type: string
+      - description: Algorithm Name
+        in: path
+        name: AlgoName
+        required: true
+        type: string
+      - description: Request Body
+        in: body
+        name: requestTask
+        required: true
+        schema:
+          $ref: '#/definitions/model.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Task'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Solve Algorithm
+      tags:
+      - Algo
 swagger: "2.0"

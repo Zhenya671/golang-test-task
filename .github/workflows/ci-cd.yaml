@@ -54,9 +54,10 @@ jobs:
           echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> config/db.env
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> config/db.env
   
-          docker-compose up -d
+          make start
+          docker ps -a
           make log_app
           docker-compose exec -T rest_api go test ./...
 
       - name: Tear down Docker Compose
-        run: docker-compose down
+        run: make stop

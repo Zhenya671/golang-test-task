@@ -55,7 +55,7 @@ jobs:
           echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> config/db.env
 
           cat config/app.env
-  
+   
           make start
           docker ps -a
           docker-compose exec -T rest_api go test ./...

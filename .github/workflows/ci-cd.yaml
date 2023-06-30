@@ -1,0 +1,27 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Compose
+        uses: docker/compose-cli@v1
+        with:
+          version: '1.29.2'
+
+      - name: Build and run tests
+        run: |
+          docker-compose up -d
+          docker-compose exec -T app go test ./...
+
+      - name: Tear down Docker Compose
+        run: docker-compose down

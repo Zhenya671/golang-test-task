@@ -56,8 +56,6 @@ jobs:
   
 
           docker-compose up -d
-          make log_db
-          make log_app
           docker-compose exec -T rest_api go test ./...
 
       - name: Tear down Docker Compose

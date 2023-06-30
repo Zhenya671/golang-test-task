@@ -10,15 +10,16 @@ import (
 	"github.com/Zhenya671/golang-test-task/internal/settings"
 	"github.com/Zhenya671/golang-test-task/internal/usecases"
 	"github.com/Zhenya671/golang-test-task/migration"
+	"github.com/go-chi/chi"
+	"github.com/gorilla/mux"
+	"github.com/rs/cors"
+	"github.com/sirupsen/logrus"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/gorilla/mux"
-	"github.com/rs/cors"
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -27,6 +28,16 @@ const (
 
 type server struct {
 	server *http.Server
+}
+
+func (s *server) swaggerRun(host string) {
+	r := chi.NewRouter()
+	r.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL("http://213.139.210.171:12/swagger/doc.json"), //The url pointing to API definition
+	))
+
+	fmt.Println(http.ListenAndServe(":12", r))
+
 }
 
 func (s *server) run(r *mux.Router, conf *settings.AppSettings) error {
@@ -57,6 +68,12 @@ func (s *server) shutdown(log *logrus.Logger) {
 	defer cancel()
 }
 
+// @title Your Application API
+// @description This is the API documentation for Your Application.
+// @version 1.0
+// @host localhost:8080
+// @BasePath /
+
 func main() {
 	logger := logrus.New()
 	logger.Info("App starting")
@@ -85,9 +102,13 @@ func main() {
 	router := v1.NewApiV1(newHandler, logger)
 
 	srv := new(server)
+
 	go srv.shutdown(logger)
 
 	ip := usecases.GetOutboundIP().String()
+	go srv.swaggerRun(ip)
+
+	logger.Infof("swagger started url %s", fmt.Sprintf("http://localhost:12/swagger/index.html", ip))
 	logger.Infof("application started on %s:%s", ip, newAppSettings.Port)
 
 	if err := srv.run(router, newAppSettings); err != nil {

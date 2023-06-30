@@ -19,7 +19,7 @@ services:
   db:
     restart: always
     image: postgres:latest
-    container_name: db_postgres
+    container_name: db_pg
     env_file:
       - config/db.env
     ports:

@@ -1,4 +1,4 @@
-basePath: /
+basePath: /api/v1
 definitions:
   model.Debt:
     properties:
@@ -47,11 +47,11 @@ definitions:
       password:
         type: string
     type: object
-host: localhost:8080
+host: 172.28.0.3:8000
 info:
   contact: {}
-  description: This is the API documentation for Your Application.
-  title: Your Application API
+  description: This is the API documentation for test-task Application.
+  title: Golang-test-task API
   version: "1.0"
 paths:
   /sign-in:

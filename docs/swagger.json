@@ -1,13 +1,13 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is the API documentation for Your Application.",
-        "title": "Your Application API",
+        "description": "This is the API documentation for test-task Application.",
+        "title": "Golang-test-task API",
         "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:8080",
-    "basePath": "/",
+    "host": "172.28.0.3:8000",
+    "basePath": "/api/v1",
     "paths": {
         "/sign-in": {
             "post": {

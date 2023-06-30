@@ -6,3 +6,6 @@ log_app:
 	docker logs --tail 50 --follow --timestamps rest_api
 log_db:
 	docker logs --tail 50 --follow --timestamps db_postgres
+swagger:
+	rm -rf docs
+	swag init -g cmd/web/main.go

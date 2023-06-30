@@ -12,6 +12,16 @@ import (
 	"strings"
 )
 
+// SignUp handles the user sign-up request.
+// @Summary User sign-up
+// @Description Register a new user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param input body model.User true "User registration data"
+// @Success 200 {object} model.Token "Token response"
+// @Failure 400 {object} model.ErrorResponse "Bad Request"
+// @Router /sign-up [post]
 func (h Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	var input model.User
 
@@ -44,6 +54,16 @@ func (h Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	w.Write(marshal)
 }
 
+// SignIn handles the user sign-in request.
+// @Summary User sign-in
+// @Description Authenticate user credentials and generate a token
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param input body model.User true "User credentials"
+// @Success 200 {object} model.Token "Token response"
+// @Failure 400 {object} model.ErrorResponse "Bad Request"
+// @Router /sign-in [post]
 func (h Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	var input model.User
 
@@ -84,6 +104,18 @@ func (h Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	w.Write(marshal)
 }
 
+// PayOff handles the debt payment request.
+// @Summary Pay off debt
+// @Description Process debt payment for a user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param UserID header string true "User ID"
+// @Param input body model.Debt true "Debt details"
+// @Success 200 {object} model.Debt "Payment response"
+// @Failure 400 {object} model.ErrorResponse "Bad Request"
+// @Failure 401 {object} model.ErrorResponse "Unauthorized"
+// @Router /user/pay-off [post]
 func (h Handler) PayOff(w http.ResponseWriter, r *http.Request) {
 	var input model.Debt
 
@@ -116,6 +148,20 @@ func (h Handler) PayOff(w http.ResponseWriter, r *http.Request) {
 	w.Write(marshal)
 }
 
+// SolveAlgo godoc
+// @Summary Solve Algorithm
+// @Description Solve an algorithm task
+// @Tags Algo
+// @Accept json
+// @Produce json
+// @Param UserID header string true "User ID"
+// @Param AlgoName path string true "Algorithm Name"
+// @Param requestTask body model.Task true "Request Body"
+// @Success 200 {object} model.Task
+// @Failure 400 {string} string "Bad Request"
+// @Failure 401 {string} string "Unauthorized"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /user/task/algo/{AlgoName} [post]
 func (h Handler) SolveAlgo(w http.ResponseWriter, r *http.Request) {
 	var requestTask model.Task
 

@@ -1,4 +1,9 @@
 # recipe-service
+##
+    ~~~
+    По личным причинам не хватило времени покрыть нормально тестами,
+    реализовать логику сохранения истории покупки решение для пользователя, 
+    не было возможности нормально продебажить ci/cd 
 ###
 - copy paste in your postman to load prepared endpoints
  [softweather-test-task.postman_collection.json](..%2FDownloads%2Fsoftweather-test-task.postman_collection.json)  (don't forget to pass auth token as well as set your host (see logs))

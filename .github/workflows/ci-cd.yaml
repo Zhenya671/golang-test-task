@@ -59,6 +59,6 @@ jobs:
           make start
           docker ps -a --format "table {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.CreatedAt}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}"
           docker-compose exec -T rest_api go test ./...
-
+ 
       - name: Tear down Docker Compose
         run: make stop

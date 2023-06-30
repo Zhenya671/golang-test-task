@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Zhenya671/golang-test-task/internal/messages"
 	"github.com/Zhenya671/golang-test-task/internal/model"
@@ -106,11 +107,18 @@ func (s UserService) SolveAlgo(userID, algoName string, input model.Task) (model
 		}
 	}
 
+	if _, ok := costTasksMap[algoName]; !ok {
+		return result, errors.New("cant do such algo")
+	}
 	err := s.repo.SetDebt(userID, costTasksMap[algoName])
 	if err != nil {
 		return result, err
 	}
 
+	if _, ok := tasksMap[algoName]; !ok {
+		return result, errors.New("cant do such algo")
+	}
 	result.OutputData = tasksMap[algoName](intSlice)
+
 	return result, nil
 }

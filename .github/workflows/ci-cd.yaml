@@ -56,7 +56,7 @@ jobs:
   
 
           docker-compose up -d
-          docker ps -a
+          make log_db
           make log_app
           docker-compose exec -T rest_api go test ./...
 

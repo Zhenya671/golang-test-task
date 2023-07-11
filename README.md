@@ -52,23 +52,23 @@ Makefile.
 ~~~
 
 ## Postman doc's
-~~~
-[softweather-test-task.postman_collection.json](..%2FDownloads%2Fsoftweather-test-task.postman_collection.json)  
-(don't forget to pass auth token as well as set your host (see logs))
-~~~
 
-## Start in docker with port specified in the env vars:
+- [softweather-test-task.postman_collection.json](..%2FDownloads%2Fsoftweather-test-task.postman_collection.json)  
+```(don't forget to pass auth token as well as set your host (see logs))```
+
+## Command's   
+- ### Start in docker with port specified in the env vars:
     ~~~bash
          make start
-## Stop container's:
+- ### Stop container's:
     ~~~bash
          make stop
-## See app's logs:
+- ### See app's logs:
     ~~~bash
          make log_app
-## See db's logs:
+- ### See db's logs:
     ~~~bash
          make log_db
-## Update swagger documentation:
+- ### Update swagger documentation:
     ~~~bash
          make swagger
